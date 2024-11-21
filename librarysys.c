@@ -3,8 +3,8 @@
 
 char booktitle[20];
 char bookauthor[20];
-int able[5];
-int bookcount = 0;
+int able =0 ;
+
 
 void addbook();
 void display();
@@ -17,7 +17,7 @@ int main()
     int choice;
     do
     {
-        printf("*****LIBRARY MANAGEMENT SYSTEM*****\n");
+        printf("\n*****LIBRARY MANAGEMENT SYSTEM*****\n");
         printf("1 add new book \n");
         printf("2 display  available books  \n");
         printf("3  issue books\n");
@@ -25,10 +25,11 @@ int main()
         printf("5 search book by title \n");
         printf("6 search book by author \n");
         printf("0 exit program \n");
+        printf("enter your choice:");
         scanf("%d", &choice);
+        getchar();
 
-        switch (choice)
-        {
+        switch (choice){
         case 1:
             addbook();
             break;
@@ -48,68 +49,70 @@ int main()
             searchbookbyauthor();
             break; */
         case 0:
-            printf("Exit the program");
+            printf("Exit the program \n");
             break;
         default:
-            printf("invalid choice try again");
+            printf("invalid choice try again \n");
         }
     } while (choice != 0);
     return 0;
 }
 void addbook()
 {
-    if (bookcount >= 5)
-    {
-        printf("library is full ");
-        return;
-    }
+    printf("enter the book title: ");
+    gets(booktitle);
 
-    printf("Enter the book title: ");
-    scanf("%s", booktitle[bookcount]);
-    printf("Enter the book author: ");
-    scanf("%s", bookauthor[bookcount]);
+    printf("enter the author name: ");
+    gets(bookauthor);
 
-    able[bookcount] = 0;
-    bookcount++;
-
-    printf("book addedsucessfully \n");
+    able =0;
+    printf("book added successfully \n");
 }
 void display()
 {
-    printf(" Available books are: \n");
-    for (int i = 0; i < bookcount; i++)
-    {
-        if (able[i] == 0)
-        {
-            printf("NO: %d \n, booktitle: '%s'\n, bookauthor: '%s' \n", i + 1, booktitle[i], bookauthor[i]);
-        }
+    if (strlen(booktitle)==0){
+        printf("no book is available \n");
+        return;
     }
+    printf("\n book details:\n");
+    printf("Title: %s\n", booktitle);
+    printf("Author: %s\n", bookauthor);
+    printf("Status: %s\n", able == 0 ? "Available" : "Issued");
+
 }
 void issue()
 {
-    if (bookcount == 0)
-    {
-        printf("NO books are available \n");
+    
+    if (strlen(booktitle) == 0) {
+        printf("No book is available to issue.\n");
         return;
     }
-    display();
-    printf(" enter the NO of book for issue book:");
-    int bookno;
-    scanf("%d", bookno);
 
-    able[bookno - 1] = 1;
-    printf("book issue successfully '%s' \n");
-    booktitle[bookno - 1];
-}
-
-void returnbook()
-{
-    printf("issue book:\n");
-    for (int i = 0; i < bookcount; i++)
-    {
-        printf("NO: %d \n, booktitle: '%s'\n, bookauthor: '%s' \n", i + 1, booktitle[i], bookauthor[i]);
+    if (able == 1) {
+        printf("The book '%s' is already issued.\n", booktitle);
+        return;
     }
+
+    able = 1; 
+    printf("You have issued the book '%s'.\n", booktitle);
+
 }
+
+void returnbook(){
+    if (strlen(booktitle) == 0) {
+        printf("No book is available to return.\n");
+        return;
+    }
+
+    if (able == 0) {
+        printf("The book '%s' is already available.\n", booktitle);
+        return;
+    }
+
+    able = 0; // Mark as available
+    printf("You have returned the book '%s'.\n", booktitle);
+
+    }
 
 // void searchbookbytitle()
 // {
