@@ -3,15 +3,15 @@
 
 char booktitles[5][20];
 char bookauthors[5][20];
-int able[5] = {0, 0, 0, 0, 0}; // to store book
+int able[5] = {0, 0, 0, 0, 0}; 
 int bookcount = 0;
 
 void addbook();
 void display();
 void issue();
 void returnbook();
-// void searchbookbytitle();
-// void searchbookbyauthor();
+ void searchbookbytitle();
+ void searchbookbyauthor();
 int main() {
   int choice;
   do {
@@ -40,12 +40,12 @@ int main() {
     case 4:
       returnbook();
       break;
-    /*case 5:
+    case 5:
         searchbookbytitle();
         break;
     case 6:
         searchbookbyauthor();
-        break; */
+        break; 
     case 0:
       printf("Exit the program \n");
       break;
@@ -137,7 +137,7 @@ void returnbook() {
   }
 
   if (able[bookno - 1] == 0) {
-    printf("The book '%s' is already available.\n", booktitles[bookno - 1]);
+    printf("The book '%s' is  available in library not to be returned .\n", booktitles[bookno - 1]);
     return;
   }
 
@@ -145,19 +145,33 @@ void returnbook() {
   printf("You have returned the book '%s'.\n", booktitles[bookno - 1]);
 }
 
-// void searchbookbytitle()
-// {
-// char title[20];
-// printf("enter title to search \n");
-// scanf("%s", &title);
-//
-// printf("search books result: \n");
-// for (int i = 0; i < bookcount; i++)
-// {
-//    if(strstr(booktitle[i], title))
-//    {
-//        printf("NO: %d, Title %s, author %s, status:%s \n", i=1, booktitle[i],
-//        bookauthor[i], able[i]==0 ? "available" :"issued" );
-//    }
-//}
-//}
+ void searchbookbytitle()
+ {
+ char title[20];
+ printf("enter title to search \n");
+ scanf("%s", &title);
+
+ printf("search books result: \n");
+ for (int i = 0; i < bookcount; i++)
+ {
+  if(strncmp(booktitles[i], title, 3)==0)
+    {
+        printf("NO: %d, Title %s, author %s, status:%s \n", i+1, booktitles[i],
+      bookauthors[i], able[i]==0 ? "available" :"issued" );
+  }
+}
+}
+
+void searchbookbyauthor(){
+  char author[20];
+  printf("Enter author name to search \n");
+  scanf("%s", author);
+
+  printf("search results \n");
+  for (int i=0;i<bookcount;i++){
+    if(strncmp(bookauthors[i], author,3)==0){
+        printf("NO: %d, Title %s, author %s, status:%s \n", i+1, booktitles[i],
+      bookauthors[i], able[i]==0 ? "available" :"issued" );
+    }
+  }
+}
