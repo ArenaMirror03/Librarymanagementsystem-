@@ -1,37 +1,302 @@
 #include <stdio.h>
+#include <string.h>
 
-void library();
+char booktitles[5][20];
+char bookauthors[5][20];
+int able[5] = {0, 0, 0, 0, 0};
+int bookcount = 0;
 
-char aadbook[5], available[20], borrow[5], returnbooks[5], title[20], author[20];
+void addbook();
+void display();
+void borrow();
+void returnbook();
+void searchbookbytitle();
+void searchbookbyauthor();
 
 int main()
 {
-    library();
-}
-void library()
-{
+    int choice;
+    do
+    {
+        printf("\n**LIBRARY MANAGEMENT SYSTEM\n");
+        printf("1. Add new book\n");
+        printf("2. Display available books\n");
+        printf("3. Borrow book\n");
+        printf("4. Return book\n");
+        printf("5. Search book by title\n");
+        printf("6. Search book by author\n");
+        printf("0. Exit program\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar();
 
-    printf("\nLibrary Management System\n");
-    printf("1. Add Book\n");
-    printf("2. Display All Books\n");
-    printf("3. Search Book\n");
-    printf("4. Issue Book\n");
-    printf("5. Return Book\n");
-    printf("6. Exit\n");
-    printf("Enter your choice:\n");
-
-    printf("Enter the book:\n");
-    scanf("%s", &aadbook);
-    printf("The books are available\n");
-    scanf("%S", &available);
-    printf(" The books are borrow: \n");
-    scanf("%s", &borrow);
-    printf("The book is return:\n");
-    scanf("%s", &returnbooks);
-    printf("Search by title:\n");
-    scanf("%s", &title);
-    printf("Search by author:\n");
-    scanf("%s", &author);
-
+        switch (choice)
+        {
+        case 1:
+            addbook();
+            break;
+        case 2:
+            display();
+            break;
+        case 3:
+            borrow();
+            break;
+        case 4:
+            returnbook();
+            break;
+        case 5:
+            searchbookbytitle();
+            break;
+        case 6:
+            searchbookbyauthor();
+            break;
+        case 0:
+            printf("Exit the program\n");
+            break;
+        default:
+            printf("Invalid choice, try again\n");
+        }
+    } while (choice != 0);
     return 0;
+}
+
+void addbook()
+{
+    if (bookcount >= 5)
+    {
+        printf("Library is full.\n");
+        return;
+    }
+
+    char title[20];
+    char author[20];
+    int isNumeric;
+
+    do
+    {
+        printf("Enter the book title: \n");
+        scanf("%s", &title);
+
+        isNumeric = 1;
+        for (int i = 0; i < strlen(title); i++)
+        {
+            if (title[i] < '0' || title[i] > '9')
+            {
+                isNumeric = 0;
+                break;
+            }
+        }
+
+        if (isNumeric)
+        {
+            printf(" Number can not be allowed\n");
+        }
+    } while (isNumeric);
+    do
+    {
+        printf("Enter the author name: \n");
+        scanf("%s", &author);
+
+        isNumeric = 1;
+        for (int i = 0; i < strlen(author); i++)
+        {
+            if (author[i] < '0' || author[i] > '9')
+            {
+                isNumeric = 0;
+                break;
+            }
+        }
+
+        if (isNumeric)
+        {
+            printf("Numbers can no alllowed\n");
+        }
+    } while (isNumeric);
+    for (int i = 0; i < 20; i++)
+    {
+        booktitles[bookcount][i] = title[i];
+        bookauthors[bookcount][i] = author[i];
+    }
+
+    able[bookcount] = 0;
+    bookcount++;
+
+    printf("Book added successfully\n");
+}
+void display()
+{
+    if (bookcount == 0)
+    {
+        printf("No books available.\n");
+        return;
+    }
+
+    printf("\nAvailable books:\n");
+    int availableBooks = 0;
+    for (int i = 0; i < bookcount; i++)
+    {
+        if (able[i] == 0)
+        {
+            printf("Title: %s\t", booktitles[i]);
+            printf("Author: %s\t   \n", bookauthors[i]);
+            availableBooks++;
+        }
+    }
+
+    if (availableBooks == 0)
+    {
+        printf("No books available to borrow.\n");
+    }
+}
+
+void borrow()
+{
+    if (bookcount == 0)
+    {
+        printf("No books available to borrow.\n");
+        return;
+    }
+
+    char title[20];
+    printf("Enter the title of the book to borrow: ");
+    scanf("%s", &title);
+
+    for (int i = 0; i < bookcount; i++)
+    {
+        if (strcmp(booktitles[i], title) == 0)
+        {
+            if (able[i] == 1)
+            {
+                printf("The book '%s' is already borrowed.\n", booktitles[i]);
+                return;
+            }
+            able[i] = 1;
+            printf("You have borrowed the book '%s'.\n", booktitles[i]);
+            return;
+        }
+    }
+
+    printf("Book with title '%s' not found.\n", title);
+}
+
+void returnbook()
+{
+    if (bookcount == 0)
+    {
+        printf("Please add a book first. No books are available in the library.\n");
+        return;
+    }
+
+    int borrowedBooks = 0;
+    for (int i = 0; i < bookcount; i++)
+    {
+        if (able[i] == 1)
+        {
+            borrowedBooks = 1;
+            break;
+        }
+    }
+
+    if (!borrowedBooks)
+    {
+        printf("No book is borrowed to return.\n");
+        return;
+    }
+
+    char title[20];
+    printf("Enter the title of the book to return: ");
+    scanf("%s", &title);
+
+    for (int i = 0; i < bookcount; i++)
+    {
+        if (strcmp(booktitles[i], title) == 0)
+        {
+            if (able[i] == 0)
+            {
+                printf("The book '%s' is already available in the library.\n", booktitles[i]);
+                return;
+            }
+            able[i] = 0;
+            printf("You have successfully returned the book '%s'.\n", booktitles[i]);
+            return;
+        }
+    }
+
+    printf("Book with title '%s' not found.\n", title);
+}
+
+void searchbookbytitle()
+{
+    if (bookcount == 0)
+    {
+        printf("No books are available.\n");
+        return;
+    }
+
+    char title[20];
+    printf("Enter title to search: ");
+    scanf("%s", title);
+
+    printf("Search results:\n");
+    int found = 0;
+    for (int i = 0; i < bookcount; i++)
+    {
+        if (strncmp(booktitles[i], title, 3) == 0)
+        {
+            printf("Title: %s, Author: %s \n", booktitles[i],
+                   bookauthors[i], able[i] == 0);
+            found = 1;
+        }
+    }
+
+    if (!found)
+    {
+        printf("No book found matching the title '%s'.\n", title);
+    }
+}
+
+void searchbookbyauthor()
+{
+    if (bookcount == 0)
+    {
+        printf("No books are available.\n");
+        return;
+    }
+
+    char author[20];
+    printf("Enter author name to search: ");
+    scanf("%s", author);
+
+    printf("Search results:\n");
+    int found = 0;
+    for (int i = 0; i < bookcount; i++)
+    {
+        if (strncmp(bookauthors[i], author, 3) == 0)
+        {
+            printf("Title: %s, Author: %s \n", booktitles[i],
+                   bookauthors[i], able[i] == 0);
+            found = 1;
+        }
+    }
+
+    if (!found)
+    {
+        printf("No book found matching the author '%s'.\n", author);
+    }
+}
+void resetcolor()
+{
+    printf("\033[0m");
+}
+void errorcolor()
+{
+    printf("\033[1;31m");
+}
+void SuccessColor()
+{
+    printf("\033[0;32m");
+}
+void yellow()
+{
+    printf("\033[0;33m");
 }
