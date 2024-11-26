@@ -10,14 +10,24 @@ void addbook();
 void display();
 void borrow();
 void returnbook();
+void errorcolor();
 void searchbookbytitle();
 void searchbookbyauthor();
+void yellow();
+
+void resetcolor();
+void green();
+void blue();
+void pink();
+void black();
 
 int main()
 {
     int choice;
     do
     {
+        yellow();
+
         printf("\n**LIBRARY MANAGEMENT SYSTEM\n");
         printf("1. Add new book\n");
         printf("2. Display available books\n");
@@ -26,8 +36,14 @@ int main()
         printf("5. Search book by title\n");
         printf("6. Search book by author\n");
         printf("0. Exit program\n");
+        resetcolor();
+
+        blue();
         printf("Enter your choice: ");
+        resetcolor();
+
         scanf("%d", &choice);
+
         getchar();
 
         switch (choice)
@@ -51,9 +67,12 @@ int main()
             searchbookbyauthor();
             break;
         case 0:
+            resetcolor();
             printf("Exit the program\n");
+            errorcolor();
             break;
         default:
+
             printf("Invalid choice, try again\n");
         }
     } while (choice != 0);
@@ -64,7 +83,10 @@ void addbook()
 {
     if (bookcount >= 5)
     {
+        errorcolor();
         printf("Library is full.\n");
+        resetcolor();
+
         return;
     }
 
@@ -74,7 +96,10 @@ void addbook()
 
     do
     {
+        pink();
         printf("Enter the book title: \n");
+        resetcolor();
+
         scanf("%s", &title);
 
         isNumeric = 1;
@@ -89,12 +114,18 @@ void addbook()
 
         if (isNumeric)
         {
+            errorcolor();
+
             printf(" Number can not be allowed\n");
+            resetcolor();
         }
     } while (isNumeric);
     do
     {
+        pink();
+
         printf("Enter the author name: \n");
+        resetcolor();
         scanf("%s", &author);
 
         isNumeric = 1;
@@ -109,7 +140,9 @@ void addbook()
 
         if (isNumeric)
         {
+            errorcolor();
             printf("Numbers can no alllowed\n");
+            resetcolor();
         }
     } while (isNumeric);
     for (int i = 0; i < 20; i++)
@@ -120,18 +153,24 @@ void addbook()
 
     able[bookcount] = 0;
     bookcount++;
-
+    green();
     printf("Book added successfully\n");
+    resetcolor();
 }
 void display()
 {
     if (bookcount == 0)
     {
+        errorcolor();
         printf("No books available.\n");
+        resetcolor();
+
         return;
     }
-
+    black();
     printf("\nAvailable books:\n");
+    resetcolor();
+
     int availableBooks = 0;
     for (int i = 0; i < bookcount; i++)
     {
@@ -145,7 +184,9 @@ void display()
 
     if (availableBooks == 0)
     {
+        errorcolor();
         printf("No books available to borrow.\n");
+        resetcolor();
     }
 }
 
@@ -153,12 +194,18 @@ void borrow()
 {
     if (bookcount == 0)
     {
+        errorcolor();
         printf("No books available to borrow.\n");
+        resetcolor();
+
         return;
     }
 
     char title[20];
+    pink();
     printf("Enter the title of the book to borrow: ");
+    resetcolor();
+
     scanf("%s", &title);
 
     for (int i = 0; i < bookcount; i++)
@@ -167,23 +214,32 @@ void borrow()
         {
             if (able[i] == 1)
             {
+                errorcolor();
                 printf("The book '%s' is already borrowed.\n", booktitles[i]);
+                resetcolor();
                 return;
             }
             able[i] = 1;
+            pink();
             printf("You have borrowed the book '%s'.\n", booktitles[i]);
+            resetcolor();
+
             return;
         }
     }
-
+    errorcolor();
     printf("Book with title '%s' not found.\n", title);
+    resetcolor();
 }
 
 void returnbook()
 {
     if (bookcount == 0)
     {
+        errorcolor();
         printf("Please add a book first. No books are available in the library.\n");
+        resetcolor();
+
         return;
     }
 
@@ -199,12 +255,18 @@ void returnbook()
 
     if (!borrowedBooks)
     {
+        errorcolor();
         printf("No book is borrowed to return.\n");
+        resetcolor();
+
         return;
     }
 
     char title[20];
+    pink();
     printf("Enter the title of the book to return: ");
+    resetcolor();
+
     scanf("%s", &title);
 
     for (int i = 0; i < bookcount; i++)
@@ -213,29 +275,39 @@ void returnbook()
         {
             if (able[i] == 0)
             {
+                green();
                 printf("The book '%s' is already available in the library.\n", booktitles[i]);
+                resetcolor();
                 return;
             }
             able[i] = 0;
+            green();
             printf("You have successfully returned the book '%s'.\n", booktitles[i]);
+            resetcolor();
             return;
         }
     }
-
+    errorcolor();
     printf("Book with title '%s' not found.\n", title);
+    resetcolor();
 }
 
 void searchbookbytitle()
 {
     if (bookcount == 0)
     {
+        errorcolor();
         printf("No books are available.\n");
+        resetcolor();
         return;
     }
 
     char title[20];
+    pink();
     printf("Enter title to search: ");
-    scanf("%s", title);
+    resetcolor();
+
+    scanf("%s", &title);
 
     printf("Search results:\n");
     int found = 0;
@@ -251,7 +323,9 @@ void searchbookbytitle()
 
     if (!found)
     {
+        errorcolor();
         printf("No book found matching the title '%s'.\n", title);
+        resetcolor();
     }
 }
 
@@ -259,12 +333,18 @@ void searchbookbyauthor()
 {
     if (bookcount == 0)
     {
+        resetcolor();
+        errorcolor();
         printf("No books are available.\n");
+        resetcolor();
+
         return;
     }
 
     char author[20];
+    pink();
     printf("Enter author name to search: ");
+    resetcolor();
     scanf("%s", author);
 
     printf("Search results:\n");
@@ -281,7 +361,9 @@ void searchbookbyauthor()
 
     if (!found)
     {
+        errorcolor();
         printf("No book found matching the author '%s'.\n", author);
+        resetcolor();
     }
 }
 void resetcolor()
@@ -292,11 +374,23 @@ void errorcolor()
 {
     printf("\033[1;31m");
 }
-void SuccessColor()
+void green()
 {
     printf("\033[0;32m");
 }
 void yellow()
 {
     printf("\033[0;33m");
+}
+void blue()
+{
+    printf("\033[0;34m");
+}
+void pink()
+{
+    printf("\033[0;35m");
+}
+void black()
+{
+    printf("\033[0;36m");
 }
