@@ -185,7 +185,7 @@ void display()
     if (availableBooks == 0)
     {
         errorcolor();
-        printf("No books available to borrow.\n");
+        printf("No books available.\n");
         resetcolor();
     }
 }
@@ -292,10 +292,8 @@ void returnbook()
     resetcolor();
 }
 
-void searchbookbytitle()
-{
-    if (bookcount == 0)
-    {
+void searchbookbytitle() {
+    if (bookcount == 0) {
         errorcolor();
         printf("No books are available.\n");
         resetcolor();
@@ -303,69 +301,83 @@ void searchbookbytitle()
     }
 
     char title[20];
-    pink();
-    printf("Enter title to search: ");
-    resetcolor();
+    int validInput = 0;
 
-    scanf("%s", &title);
-
-    printf("Search results:\n");
-    int found = 0;
-    for (int i = 0; i < bookcount; i++)
-    {
-        if (strncmp(booktitles[i], title, 3) == 0)
-        {
-            printf("Title: %s, Author: %s \n", booktitles[i],
-                   bookauthors[i], able[i] == 0);
-            found = 1;
-        }
-    }
-
-    if (!found)
-    {
-        errorcolor();
-        printf("No book found matching the title '%s'.\n", title);
+    while (!validInput) {
+        pink();
+        printf("Enter title name to search or type exit for menu : ");
+        
         resetcolor();
+        scanf("%s", title);
+
+        if (strcmp(title, "wapis") == 0) {
+            printf("Exiting search by author.\n");
+            return;
+        }
+
+        validInput = 1; 
+        printf("Search results:\n");
+        int found = 0;
+        for (int i = 0; i < bookcount; i++) {
+            if (strncmp(booktitles[i], title, 3) == 0) { 
+                printf("Title: %s, Author: %s, Status: %s\n", booktitles[i],
+                       bookauthors[i], able[i] );
+                found = 1;
+            }
+        }
+
+        if (!found) {
+            errorcolor();
+            printf("No book found matching the author '%s'.\n", title);
+            resetcolor();
+            validInput = 0; 
+        }
     }
 }
 
-void searchbookbyauthor()
-{
-    if (bookcount == 0)
-    {
-        resetcolor();
+void searchbookbyauthor() {
+    if (bookcount == 0) {
         errorcolor();
         printf("No books are available.\n");
         resetcolor();
-
         return;
     }
 
     char author[20];
-    pink();
-    printf("Enter author name to search: ");
-    resetcolor();
-    scanf("%s", author);
+    int validInput = 0;
 
-    printf("Search results:\n");
-    int found = 0;
-    for (int i = 0; i < bookcount; i++)
-    {
-        if (strncmp(bookauthors[i], author, 3) == 0)
-        {
-            printf("Title: %s, Author: %s \n", booktitles[i],
-                   bookauthors[i], able[i] == 0);
-            found = 1;
+    while (!validInput) {
+        pink();
+        printf("Enter author name to search or type exit for menu: ");
+        
+        resetcolor();
+        scanf("%s", author);
+
+        if (strcmp(author, "exit") == 0) {
+            printf("Exiting search by author.\n");
+            return;
+        }
+
+        validInput = 1; 
+        printf("Search results:\n");
+        int found = 0;
+        for (int i = 0; i < bookcount; i++) {
+            if (strncmp(bookauthors[i], author, 3) == 0) { 
+                printf("Title: %s, Author: %s, Status: %s\n", booktitles[i],
+                       bookauthors[i], able[i] == 0 ? "Available" : "Borrowed");
+                found = 1;
+            }
+        }
+
+        if (!found) {
+            errorcolor();
+            printf("No book found matching the author '%s'.\n", author);
+            resetcolor();
+            validInput = 0; 
         }
     }
-
-    if (!found)
-    {
-        errorcolor();
-        printf("No book found matching the author '%s'.\n", author);
-        resetcolor();
-    }
 }
+
 void resetcolor()
 {
     printf("\033[0m");
